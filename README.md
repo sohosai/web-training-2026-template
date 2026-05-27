@@ -1,0 +1,1 @@
+# web-training-2026-template
