@@ -1,0 +1,42 @@
+{
+  "name": "web-training-2026",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [
+    3000,
+    5173,
+    3306,
+    8080
+  ],
+  "portsAttributes": {
+    "3000": {
+      "label": "Backend"
+    },
+    "3306": {
+      "label": "MySQL"
+    },
+    "5173": {
+      "label": "Frontend (Vite)"
+    },
+    "8080": {
+      "label": "phpMyAdmin"
+    }
+  },
+  "postCreateCommand": "cd backend && cp -n .env.example .env && npm install && cd ../frontend && npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "biomejs.biome",
+        "MS-CEINTL.vscode-language-pack-ja"
+      ]
+    }
+  },
+  "remoteEnv": {
+    "DATABASE_URL": "mysql://app:app@db:3306/app",
+    "PORT": "3000"
+  }
+}
