@@ -1,5 +1,6 @@
 {
   "name": "web-training-2026",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
