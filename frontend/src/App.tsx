@@ -1,4 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
+import { apiUrl } from "./config";
 
 type Message = {
   id: number;
@@ -19,7 +20,7 @@ export default function App() {
 
   const checkHealth = async () => {
     try {
-      const res = await fetch("/api/health");
+      const res = await fetch(apiUrl("/api/health"));
       if (res.ok) {
         setHealth({ ok: true, body: await res.json() });
       } else {
@@ -32,7 +33,7 @@ export default function App() {
 
   const loadMessages = async () => {
     try {
-      const res = await fetch("/api/messages");
+      const res = await fetch(apiUrl("/api/messages"));
       if (res.status === 404) {
         setError("404");
         return;
@@ -52,7 +53,7 @@ export default function App() {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/messages", {
+    const res = await fetch(apiUrl("/api/messages"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message, userName }),
