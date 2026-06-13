@@ -4,6 +4,7 @@ type Message = {
   id: number;
   message: string;
   userName: string;
+  password: string;
   thread: string;
   createdAt: string;
 };
@@ -15,6 +16,7 @@ export default function App() {
   }>({ ok: false, body: null });
   const [messages, setMessages] = useState<Message[]>([]);
   const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const [thread, setThread] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +68,20 @@ export default function App() {
     setMessage("");
     loadMessages();
   };
+  const createUser = async (e: FormEvent) => {
+    e.preventDefault();
+    const res = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({userName, password}),
+    });
+    if (!res.ok) {
+      setError(`POST failed: ${res.status}`);
+      return;
+    }
+    setMessage("");
+    loadMessages();
+  };
   const new_messages = Array.from(new Map(messages.map(item => [item.thread, item])).values());
   return (
     <main style={{ maxWidth: 640, margin: "2rem auto", padding: "0 1rem" }}>
@@ -97,6 +113,33 @@ export default function App() {
       </section>
 
       <section>
+        <form
+          onSubmit={createUser}
+          style={{
+            padding: "20px 0 0 0",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+            marginBottom: "1rem",
+          }}
+        >
+        <h2>初回登録はこちら</h2>
+        <input
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="名前"
+            required
+          />
+          <input type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="パスワード"
+            required
+          />
+          <button type="submit" style={{ alignSelf: "flex-start" }}>
+            登録
+          </button>
+        </form>
         <h2>スレッド一覧</h2>
         <div id="thread-list">
           {error === "404" ? ( //new
