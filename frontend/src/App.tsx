@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useState } from "react";
+import React, { type FormEvent, useEffect, useState } from "react";
 
 type Message = {
   id: number;
@@ -67,6 +67,7 @@ export default function App() {
     setMessage("");
     loadMessages();
   };
+
   const new_messages = Array.from(
     new Map(messages.map((item) => [item.thread, item])).values(),
   );
@@ -115,8 +116,8 @@ export default function App() {
               ) : (
                 //const uniqueArray = Array.from(new Set(m.thread for m in messages));
                 //const new_massages = Array.from(new Map(messages.map(item => [item.thread, item])).values());
-                new_messages.map((m, index) => (
-                  <>
+                new_messages.map((m) => (
+                  <React.Fragment key={m.thread}>
                     <p></p>
                     <a
                       href={`/threads/${m.thread}`}
@@ -129,7 +130,7 @@ export default function App() {
                     >
                       {m.thread}
                     </a>
-                  </>
+                  </React.Fragment>
                 ))
               )}
             </ul>
