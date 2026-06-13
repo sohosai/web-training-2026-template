@@ -126,7 +126,6 @@ export default function App() {
                         whiteSpace: "pre-wrap",
                         textDecoration: "none",
                       }}
-                      key={`threadlink-${index}`}
                     >
                       {m.thread}
                     </a>
