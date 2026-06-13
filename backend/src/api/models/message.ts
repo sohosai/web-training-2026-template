@@ -1,1 +1,2 @@
-export type MessageRequest = { message: string; userName: string };
+export type MessageRequest = {thread: string; message: string; userName: string; password: string };
+
