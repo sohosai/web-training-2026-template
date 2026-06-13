@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Message = {
   id: number;
@@ -11,9 +11,18 @@ type Message = {
 };
 
 const RAINBOW_COLORS = [
-  "#FF0000", "#FF7F00", "#FFFF00", "#00CC44",
-  "#0088FF", "#4B0082", "#EE82EE", "#FF1493",
-  "#FF6600", "#00FFCC", "#AA00FF", "#FFD700",
+  "#FF0000",
+  "#FF7F00",
+  "#FFFF00",
+  "#00CC44",
+  "#0088FF",
+  "#4B0082",
+  "#EE82EE",
+  "#FF1493",
+  "#FF6600",
+  "#00FFCC",
+  "#AA00FF",
+  "#FFD700",
 ];
 
 const BURST_ANGLES = Array.from(
@@ -32,13 +41,14 @@ function ThreadPage() {
   const [likedIds, setLikedIds] = useState<Set<number>>(new Set());
   const [burstingIds, setBurstingIds] = useState<Set<number>>(new Set());
 
-
   useEffect(() => {
     const load = async () => {
       try {
         const res = await fetch("/api/messages");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const all: Message[] = (await res.json()).map((m: Omit<Message, "count">) => ({ ...m, count: 9000 }));
+        const all: Message[] = (await res.json()).map(
+          (m: Omit<Message, "count">) => ({ ...m, count: 9000 }),
+        );
         setMessages(all.filter((m) => m.thread === threadName));
         setError(null);
       } catch (e) {
@@ -81,11 +91,34 @@ function ThreadPage() {
 
   return (
     <main style={{ maxWidth: 640, margin: "2rem auto", padding: "0 1rem" }}>
-      <Link to="/" style={{ fontSize: "0.875rem", padding: "5px", color: "black", backgroundColor: "#cccccc", textDecoration: "none", borderRadius: "3px" }}>
+      <Link
+        to="/"
+        style={{
+          fontSize: "0.875rem",
+          padding: "5px",
+          color: "black",
+          backgroundColor: "#cccccc",
+          textDecoration: "none",
+          borderRadius: "3px",
+        }}
+      >
         ← 一覧に戻る
       </Link>
       <h1 style={{ marginTop: "0.75rem" }}>スレッド: {threadName}</h1>
-      <Link to="/" style={{ position: "absolute", bottom: "20px", padding: "10px", color: "white", backgroundColor: "#ff6347", textDecoration: "none", borderRadius: "3px" }}>スレッドを削除</Link>
+      <Link
+        to="/"
+        style={{
+          position: "absolute",
+          bottom: "20px",
+          padding: "10px",
+          color: "white",
+          backgroundColor: "#ff6347",
+          textDecoration: "none",
+          borderRadius: "3px",
+        }}
+      >
+        スレッドを削除
+      </Link>
       {error ? (
         <p style={{ color: "crimson" }}>{error}</p>
       ) : messages.length === 0 ? (
@@ -110,9 +143,22 @@ function ThreadPage() {
               <p style={{ margin: "0.25rem 0 0", whiteSpace: "pre-wrap" }}>
                 {m.message}
               </p>
-              <div style={{ margin: "0.25rem 0 0", display: "flex", alignItems: "center" }}>
-                <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+              <div
+                style={{
+                  margin: "0.25rem 0 0",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    display: "inline-flex",
+                    alignItems: "center",
+                  }}
+                >
                   <button
+                    type="button"
                     onClick={() => handleLike(m.id)}
                     style={{
                       background: "none",
@@ -123,14 +169,23 @@ function ThreadPage() {
                       alignItems: "center",
                       color: likedIds.has(m.id) ? "#FFB700" : "currentColor",
                       transition: "color 0.2s",
-                      animation: burstingIds.has(m.id) ? "like-pop 0.4s ease-out" : "none",
+                      animation: burstingIds.has(m.id)
+                        ? "like-pop 0.4s ease-out"
+                        : "none",
                     }}
                     aria-label="いいね"
                   >
                     <svg
-                      xmlns="http://www.w3.org/2000/svg" width="17" height="20" viewBox="0 0 24 24"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="20"
+                      viewBox="0 0 24 24"
                       fill={likedIds.has(m.id) ? "#FFB700" : "none"}
-                      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
                       <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" />
                       <path d="M7 10v12" />
@@ -141,14 +196,15 @@ function ThreadPage() {
                     <>
                       {BURST_ANGLES.map((angle, i) => (
                         <span
-                          key={i}
+                          key={`burst-${angle}`}
                           style={
                             {
                               position: "absolute",
                               width: 7,
                               height: 7,
                               borderRadius: "50%",
-                              backgroundColor: RAINBOW_COLORS[i % RAINBOW_COLORS.length],
+                              backgroundColor:
+                                RAINBOW_COLORS[i % RAINBOW_COLORS.length],
                               top: "50%",
                               left: "50%",
                               "--tx": `${Math.cos(angle) * 32}px`,
@@ -180,14 +236,25 @@ function ThreadPage() {
                 <span style={{ marginLeft: "0.10rem", fontSize: "15px" }}>
                   {m.count}
                 </span>
-                <svg style={{ marginLeft: "0.50rem", marginRight: "0" }}
-                  xmlns="http://www.w3.org/2000/svg" width="17" height="20" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                <svg
+                  aria-hidden="true"
+                  style={{ marginLeft: "0.50rem", marginRight: "0" }}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
                   <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z" />
                   <path d="M17 14V2" />
                 </svg>
-                <span style={{ marginLeft: "0.10rem", fontSize: "15px" }}>{"0"}</span>
+                <span style={{ marginLeft: "0.10rem", fontSize: "15px" }}>
+                  {"0"}
+                </span>
               </div>
             </li>
           ))}
