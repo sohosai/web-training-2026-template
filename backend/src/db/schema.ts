@@ -6,6 +6,7 @@ export const messages = mysqlTable("messages", {
   message: varchar("message", { length: 255 }).notNull(),
   userName: varchar("user_name", { length: 255 }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  favoriteCount: int("favorite_count").default(0).notNull(),
 });
 
 export type Message = typeof messages.$inferSelect;
